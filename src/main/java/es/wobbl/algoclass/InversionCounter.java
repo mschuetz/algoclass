@@ -1,14 +1,11 @@
 package es.wobbl.algoclass;
 
+import static es.wobbl.algoclass.Util.split;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-
-import es.wobbl.algoclass.InversionCounter.Result;
-
-import static es.wobbl.algoclass.Util.split;
 
 public class InversionCounter {
 

@@ -1,9 +1,11 @@
 package es.wobbl.algoclass;
 
+import static es.wobbl.algoclass.Util.nextOrNull;
+import static es.wobbl.algoclass.Util.split;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import static es.wobbl.algoclass.Util.split;
 
 import com.google.common.collect.Lists;
 
@@ -25,10 +27,6 @@ public class MergeSort {
 			}
 		} while (val1 != null || val2 != null);
 		return out;
-	}
-
-	private static <T> T nextOrNull(final Iterator<T> it2) {
-		return it2.hasNext() ? it2.next() : null;
 	}
 
 	public static <T extends Comparable<T>> List<T> sort(List<T> input) {
