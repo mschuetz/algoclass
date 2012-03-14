@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 
 public class MergeSort {
 
-	private static <T extends Comparable<T>> List<T> merge(List<T> l1, List<T> l2, Comparator<T> cmp) {
+	private static <T> List<T> merge(List<T> l1, List<T> l2, Comparator<T> cmp) {
 		final ArrayList<T> out = Lists.newArrayListWithCapacity(l1.size() + l2.size());
 		final Iterator<T> it1 = l1.iterator();
 		final Iterator<T> it2 = l2.iterator();
@@ -30,7 +30,7 @@ public class MergeSort {
 		return out;
 	}
 
-	public static <T extends Comparable<T>> List<T> sort(List<T> input, Comparator<T> cmp) {
+	public static <T> List<T> sort(List<T> input, Comparator<T> cmp) {
 		if (input.size() <= 1) {
 			return input;
 		}
