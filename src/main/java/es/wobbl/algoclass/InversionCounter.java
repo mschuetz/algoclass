@@ -1,6 +1,6 @@
 package es.wobbl.algoclass;
 
-import static es.wobbl.algoclass.Util.split;
+import static es.wobbl.algoclass.Util.binarySplit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +49,8 @@ public class InversionCounter {
 		if (list.size() <= 1)
 			return result(list, 0L);
 
-		Result<T> a = count(split(list, 0));
-		Result<T> b = count(split(list, 1));
+		Result<T> a = count(binarySplit(list, 0));
+		Result<T> b = count(binarySplit(list, 1));
 		Result<T> c = countSplitInversions(a.list, b.list);
 		return result(c.list, a.inversions + b.inversions + c.inversions);
 	}

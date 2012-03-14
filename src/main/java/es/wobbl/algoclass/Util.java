@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Util {
-	public static <T> List<T> split(List<T> in, int index) {
+	public static <T> List<T> binarySplit(List<T> in, int index) {
 		int partitionSize = in.size() / 2;
 		int from = partitionSize * index;
 		int to = index == 0 ? partitionSize : in.size();
