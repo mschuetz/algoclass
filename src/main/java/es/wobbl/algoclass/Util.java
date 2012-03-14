@@ -3,13 +3,18 @@ package es.wobbl.algoclass;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import static es.wobbl.algoclass.Util.split;
 
 import com.google.common.collect.Lists;
 
-public class MergeSort {
+public class Util {
+	static <T> List<T> split(List<T> in, int index) {
+		int partitionSize = in.size() / 2;
+		int from = partitionSize * index;
+		int to = index == 0 ? partitionSize : in.size();
+		return in.subList(from, to);
+	}
 
-	private static <T extends Comparable<T>> List<T> merge(List<T> l1, List<T> l2) {
+	public static <T extends Comparable<T>> List<T> merge(List<T> l1, List<T> l2) {
 		final ArrayList<T> out = Lists.newArrayListWithCapacity(l1.size() + l2.size());
 		final Iterator<T> it1 = l1.iterator();
 		final Iterator<T> it2 = l2.iterator();
@@ -29,13 +34,5 @@ public class MergeSort {
 
 	private static <T> T nextOrNull(final Iterator<T> it2) {
 		return it2.hasNext() ? it2.next() : null;
-	}
-
-	public static <T extends Comparable<T>> List<T> sort(List<T> input) {
-		if (input.size() <= 1) {
-			return input;
-		}
-
-		return merge(sort(split(input, 0)), sort(split(input, 1)));
 	}
 }
