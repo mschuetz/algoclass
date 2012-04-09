@@ -2,10 +2,18 @@ package es.wobbl.algoclass;
 
 import static es.wobbl.algoclass.Util.binarySplit;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+
+import de.idlecrew.util.Profile;
 
 public class InversionCounter {
 
@@ -46,6 +54,7 @@ public class InversionCounter {
 	}
 
 	public static <T extends Comparable<T>> Result<T> count(List<T> list) {
+		calls++;
 		if (list.size() <= 1)
 			return result(list, 0L);
 
@@ -53,5 +62,26 @@ public class InversionCounter {
 		Result<T> b = count(binarySplit(list, 1));
 		Result<T> c = countSplitInversions(a.list, b.list);
 		return result(c.list, a.inversions + b.inversions + c.inversions);
+	}
+	
+	static long calls = 0;
+
+	public static void main(String[] args) throws IOException {
+		final List<Integer> numbers = Lists.transform(Files.readLines(new File(System.getenv("HOME") + File.separator + "IntegerArray.txt"), Charsets.UTF_8),
+				new Function<String, Integer>() {
+
+					@Override
+					public Integer apply(String input) {
+						return new Integer(input);
+					}
+				});
+		Profile.report("count inversions", TimeUnit.MILLISECONDS, 1, new Runnable() {
+			@Override
+			public void run() {
+				Result<Integer> inversions = count(numbers);
+				System.out.println(inversions.inversions);
+				System.out.println(calls);
+			}
+		});
 	}
 }

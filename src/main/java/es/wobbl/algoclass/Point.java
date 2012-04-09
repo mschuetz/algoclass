@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.primitives.Doubles;
 
 public class Point {
 
@@ -148,13 +149,15 @@ public class Point {
 			}
 		}));
 		Pair rightPair = closestPair(rx, ry);
+		
+		double delta = Doubles.min(leftPair.distance, rightPair.distance);
 
-		Pair splitPair = closestSplitPair(pointsx, pointsy);
+		Pair splitPair = closestSplitPair(pointsx, pointsy, delta);
 
 		return Pair.maxDistance(leftPair, rightPair, splitPair);
 	}
 
-	private static Pair closestSplitPair(List<Point> pointsx, List<Point> pointsy) {
+	private static Pair closestSplitPair(List<Point> pointsx, List<Point> pointsy, double delta) {
 		return Pair.withInfiniteDistance;
 	}
 

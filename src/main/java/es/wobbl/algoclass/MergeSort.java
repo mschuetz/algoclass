@@ -1,7 +1,8 @@
 package es.wobbl.algoclass;
 
-import static es.wobbl.algoclass.Util.nextOrNull;
+
 import static es.wobbl.algoclass.Util.binarySplit;
+import static es.wobbl.algoclass.Util.nextOrNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+
+import es.wobbl.algoclass.Util.StandardComparator;
 
 public class MergeSort {
 
@@ -40,12 +43,5 @@ public class MergeSort {
 
 	public static <T extends Comparable<T>> List<T> sort(List<T> input) {
 		return sort(input, new StandardComparator<T>());
-	}
-	
-	private static class StandardComparator<T extends Comparable<T>> implements Comparator<T> {
-		@Override
-		public int compare(T o1, T o2) {
-			return o1.compareTo(o2);
-		}
 	}
 }
