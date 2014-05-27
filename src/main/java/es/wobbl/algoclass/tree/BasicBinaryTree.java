@@ -20,7 +20,9 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 
 	@Override
 	public BasicNode<T> lookup(T value) {
-		return null;
+		if (root == null)
+			return null;
+		return root.lookup(value);
 	}
 
 	@Override

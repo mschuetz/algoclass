@@ -27,4 +27,18 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 			}
 		}
 	}
+
+	BasicNode<T> lookup(T value) {
+		final int rel = value.compareTo(getValue());
+		if (rel == 0) {
+			return this;
+		}
+
+		final BasicNode<T> node = (rel < 0 ? getLeft() : getRight());
+
+		if (node == null)
+			return null;
+
+		return node.lookup(value);
+	}
 }
