@@ -11,6 +11,6 @@ public interface BinaryTree<N extends Node<N, T>, T extends Comparable<T>> {
 
 	public N lookup(T value);
 
-	public void delete(N node);
+	public void delete(T value);
 
 }

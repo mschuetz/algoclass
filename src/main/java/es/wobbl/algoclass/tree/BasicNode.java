@@ -28,10 +28,14 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 		}
 	}
 
-	BasicNode<T> lookup(T value) {
+	public interface Visitor<V, T extends Comparable<T>> {
+		V visit(BasicNode<T> parent, BasicNode<T> current);
+	}
+
+	<V> V lookup(T value, Visitor<V, T> visitor) {
 		final int rel = value.compareTo(getValue());
 		if (rel == 0) {
-			return this;
+			return visitor.visit(null, this);
 		}
 
 		final BasicNode<T> node = (rel < 0 ? getLeft() : getRight());
@@ -39,6 +43,16 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 		if (node == null)
 			return null;
 
-		return node.lookup(value);
+		if (node.getValue().equals(value)) {
+			return visitor.visit(this, node);
+		}
+
+		return node.lookup(value, visitor);
+	}
+
+	BasicNode<T> lookup(T value) {
+		return lookup(value, (parent, current) -> {
+			return current;
+		});
 	}
 }
