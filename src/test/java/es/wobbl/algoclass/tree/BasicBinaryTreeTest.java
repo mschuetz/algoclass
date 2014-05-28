@@ -3,10 +3,16 @@ package es.wobbl.algoclass.tree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.collect.Sets;
 
 public class BasicBinaryTreeTest {
 
@@ -23,6 +29,11 @@ public class BasicBinaryTreeTest {
 	static <T extends Comparable<T>> void assertCanLookup(BasicBinaryTree<T> tree, T value) {
 		final BasicNode<T> node = tree.lookup(value);
 		assertEquals(value, node.getValue());
+	}
+
+	static <T extends Comparable<T>> void assertCanLookup(BasicBinaryTree<T> tree, Iterable<T> values) {
+		for (final T value : values)
+			assertCanLookup(tree, value);
 	}
 
 	@Before
@@ -49,7 +60,7 @@ public class BasicBinaryTreeTest {
 	}
 
 	@Test
-	public void testDelete() throws Exception {
+	public void testDeleteFullNode() throws Exception {
 		tree.delete(8);
 		assertNull(tree.lookup(8));
 		eachValue((i) -> {
@@ -85,6 +96,26 @@ public class BasicBinaryTreeTest {
 		eachValue((i) -> {
 			if (i != 10)
 				assertCanLookup(tree, i);
+		});
+	}
+
+	@Test
+	public void testDeleteAll() {
+		IntStream.range(0, 32).parallel().forEach((j) -> {
+			final BasicBinaryTree<Integer> tree = new BasicBinaryTree<>();
+			final Set<Integer> values = Sets.newHashSet();
+			for (int i = 0; i < 1024; i++) {
+				final int n = RandomUtils.nextInt(65536);
+				values.add(n);
+				tree.insert(n);
+			}
+			assertCanLookup(tree, values);
+			final HashSet<Integer> values2 = new HashSet<>(values);
+			for (final int n : values) {
+				values2.remove(n);
+				tree.delete(n);
+				assertCanLookup(tree, values2);
+			}
 		});
 	}
 }
