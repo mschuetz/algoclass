@@ -17,9 +17,9 @@ import com.google.common.collect.Sets;
 public class BasicBinaryTreeTest {
 
 	private BasicBinaryTree<Integer> tree;
-	private BasicNode<Integer> root;
 
 	static void eachValue(Consumer<Integer> c) {
+		c.accept(13);
 		for (int i = 0, sign = 1; i < 5; i++, sign *= -1) {
 			c.accept(8 + i * sign);
 			c.accept(20 - i * sign);
@@ -39,7 +39,6 @@ public class BasicBinaryTreeTest {
 	@Before
 	public void createTree() {
 		tree = new BasicBinaryTree<>();
-		root = tree.insert(13);
 		eachValue((i) -> {
 			tree.insert(i);
 		});
@@ -47,6 +46,7 @@ public class BasicBinaryTreeTest {
 
 	@Test
 	public void testSimpleInsert() {
+		final BasicNode<Integer> root = tree.getRoot();
 		assertEquals(8, root.getLeft().getValue().intValue());
 		assertEquals(20, root.getRight().getValue().intValue());
 		assertEquals(10, root.getLeft().getRight().getValue().intValue());
@@ -94,7 +94,7 @@ public class BasicBinaryTreeTest {
 		tree.delete(13);
 		assertNull(tree.lookup(13));
 		eachValue((i) -> {
-			if (i != 10)
+			if (i != 13)
 				assertCanLookup(tree, i);
 		});
 	}
