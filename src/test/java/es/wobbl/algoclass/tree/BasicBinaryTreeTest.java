@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -105,7 +105,7 @@ public class BasicBinaryTreeTest {
 			final BasicBinaryTree<Integer> tree = new BasicBinaryTree<>();
 			final Set<Integer> values = Sets.newHashSet();
 			for (int i = 0; i < 1024; i++) {
-				final int n = RandomUtils.nextInt(65536);
+				final int n = RandomUtils.nextInt(0, 65536);
 				values.add(n);
 				tree.insert(n);
 			}

@@ -8,7 +8,7 @@ import java.util.AbstractList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomUtils;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
@@ -28,7 +28,7 @@ public class QuickSort {
 		public ListView(List<T> base, int offset, int length) {
 			Preconditions.checkArgument(offset + length <= base.size());
 			if (base instanceof ListView) {
-				ListView<T> lvBase = ((ListView<T>) base);
+				final ListView<T> lvBase = ((ListView<T>) base);
 				this.offset = offset + lvBase.offset;
 				this.base = lvBase.base;
 			} else {
@@ -55,7 +55,7 @@ public class QuickSort {
 	}
 
 	static <T> void swap(List<T> list, int i1, int i2) {
-		T tmp = list.get(i1);
+		final T tmp = list.get(i1);
 		list.set(i1, list.get(i2));
 		list.set(i2, tmp);
 	}
@@ -77,14 +77,14 @@ public class QuickSort {
 		if (arr.size() <= 1)
 			return;
 
-		ListEntry<T> pivotEntry = pivotFunc.apply(arr);
+		final ListEntry<T> pivotEntry = pivotFunc.apply(arr);
 
 		if (pivotEntry.index != 0) {
 			swap(arr, pivotEntry.index, 0);
 			pivotEntry.index = 0;
 		}
 
-		int i = partition(arr, pivotEntry, cmp);
+		final int i = partition(arr, pivotEntry, cmp);
 
 		swap(arr, 0, i - 1);
 		sort(new ListView<T>(arr, 0, i - 1), cmp, pivotFunc);
@@ -94,8 +94,8 @@ public class QuickSort {
 	public static <T> int partition(List<T> arr, ListEntry<T> pivotEntry, Comparator<T> cmp) {
 		int i = 1, j = 1;
 		while (j < arr.size()) {
-			T jth = arr.get(j);
-			int rel = cmp.compare(jth, pivotEntry.entry);
+			final T jth = arr.get(j);
+			final int rel = cmp.compare(jth, pivotEntry.entry);
 			if (rel < 0) {
 				swap(arr, i, j);
 				i++;
@@ -137,8 +137,9 @@ public class QuickSort {
 		public ListEntry<T> apply(List<T> input) {
 			Preconditions.checkArgument(input.size() > 0);
 			@SuppressWarnings("unchecked")
-			List<ListEntry<T>> three = Lists.newArrayList(new ListEntry<T>(0, input.get(0)), new ListEntry<T>(input.size() / 2,
-					input.get(input.size() / 2)), new ListEntry<T>(input.size() - 1, input.get(input.size() - 1)));
+			final List<ListEntry<T>> three = Lists.newArrayList(new ListEntry<T>(0, input.get(0)), new ListEntry<T>(
+					input.size() / 2, input.get(input.size() / 2)),
+					new ListEntry<T>(input.size() - 1, input.get(input.size() - 1)));
 			sort(three, new Comparator<ListEntry<T>>() {
 
 				@Override
@@ -156,7 +157,7 @@ public class QuickSort {
 		@Override
 		public ListEntry<T> apply(List<T> input) {
 			Preconditions.checkArgument(input.size() > 0);
-			int index = RandomUtils.nextInt(input.size());
+			final int index = RandomUtils.nextInt(0, input.size());
 			return new ListEntry<T>(index, input.get(index));
 		}
 	}
@@ -180,7 +181,7 @@ public class QuickSort {
 	}
 
 	public static void main(String args[]) throws IOException {
-		String fn = System.getenv("HOME") + File.separator + "QuickSort.txt";
+		final String fn = System.getenv("HOME") + File.separator + "QuickSort.txt";
 		List<Long> numbers = readNumbers(fn);
 		sort(numbers, new Util.StandardComparator<Long>(), new PivotOnFirst<Long>());
 		assertSorted(numbers);
