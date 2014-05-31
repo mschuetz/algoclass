@@ -3,11 +3,14 @@ package es.wobbl.algoclass.tree;
 import com.google.common.base.Preconditions;
 
 public class Node<N extends Node<N, T>, T extends Comparable<T>> {
-	private N left, right;
-	private final T value;
+	private N left, right, parent;
+	private T value;
 
-	public Node(T value, N left, N right) {
+	public Node(T value, N parent, N left, N right) {
 		this.value = value;
+		if (parent != null) {
+			setParent(parent);
+		}
 		if (left != null) {
 			setLeft(left);
 		}
@@ -48,5 +51,22 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 
 	public T getValue() {
 		return value;
+	}
+
+	void setValue(T value) {
+		this.value = value;
+	}
+
+	public N getParent() {
+		return parent;
+	}
+
+	void setParent(N parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public String toString() {
+		return "Node [value=" + value + " left=" + left + ", right=" + right + "]";
 	}
 }

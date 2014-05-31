@@ -1,7 +1,5 @@
 package es.wobbl.algoclass.tree;
 
-import java.util.function.Consumer;
-
 public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<BasicNode<T>, T> {
 
 	private BasicNode<T> root;
@@ -18,7 +16,7 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 	@Override
 	public BasicNode<T> insert(T value) {
 		if (root == null) {
-			root = new BasicNode<>(value, null, null);
+			root = new BasicNode<>(value, null, null, null);
 			return root;
 		}
 		return root.insert(value);
@@ -35,33 +33,38 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 	public void delete(T value) {
 		if (root == null)
 			return;
-		root.lookup(value, (parent, current) -> {
-			final Consumer<BasicNode<T>> setter;
-			if (parent == null)
-				setter = this::setRoot;
-			else
-				setter = current == parent.getLeft() ? parent::setLeft : parent::setRight;
+		delete(root, value);
+	}
 
+	void delete(BasicNode<T> current, T value) {
+		final int cmp = value.compareTo(current.getValue());
+		if (cmp < 0) {
+			if (current.getLeft() != null)
+				delete(current.getLeft(), value);
+		} else if (cmp > 0) {
+			if (current.getRight() != null)
+				delete(current.getRight(), value);
+		} else {
 			switch (current.childCount()) {
 			case 0:
-				setter.accept(null);
+				if (current != getRoot())
+					current.replaceInParent(null);
+				else
+					setRoot(null);
 				break;
 			case 1:
-				if (current.getRight() == null)
-					setter.accept(current.getLeft());
+				final BasicNode<T> replacement = current.getRight() != null ? current.getRight() : current.getLeft();
+				if (current != getRoot())
+					current.replaceInParent(replacement);
 				else
-					setter.accept(current.getRight());
+					setRoot(replacement);
 				break;
 			case 2:
-				setter.accept(current.getLeft());
-				final BasicNode<T> newNode = insert(current.getRight().getValue());
-				newNode.setLeft(current.getRight().getLeft());
-				newNode.setRight(current.getRight().getRight());
+				final BasicNode<T> successor = current.successor();
+				current.setValue(successor.getValue());
+				delete(successor, value);
 				break;
-			default:
-				throw new IllegalArgumentException("not a binary tree node");
 			}
-			return null;
-		});
+		}
 	}
 }

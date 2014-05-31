@@ -1,8 +1,9 @@
 package es.wobbl.algoclass.tree;
 
+
 class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
-	BasicNode(T value, BasicNode<T> a, BasicNode<T> b) {
-		super(value, a, b);
+	BasicNode(T value, BasicNode<T> parent, BasicNode<T> a, BasicNode<T> b) {
+		super(value, parent, a, b);
 	}
 
 	BasicNode<T> insert(T value) {
@@ -11,7 +12,7 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 			return this;
 		} else if (rel < 0) {
 			if (getLeft() == null) {
-				final BasicNode<T> newNode = new BasicNode<>(value, null, null);
+				final BasicNode<T> newNode = new BasicNode<>(value, this, null, null);
 				setLeft(newNode);
 				return newNode;
 			} else {
@@ -19,7 +20,7 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 			}
 		} else {
 			if (getRight() == null) {
-				final BasicNode<T> newNode = new BasicNode<>(value, null, null);
+				final BasicNode<T> newNode = new BasicNode<>(value, this, null, null);
 				setRight(newNode);
 				return newNode;
 			} else {
@@ -54,5 +55,30 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 		return lookup(value, (parent, current) -> {
 			return current;
 		});
+	}
+
+	public BasicNode<T> predecessor() {
+		BasicNode<T> cur = getLeft();
+		if (cur != null)
+			while (cur.getRight() != null)
+				cur = cur.getRight();
+		return cur;
+	}
+
+	public BasicNode<T> successor() {
+		BasicNode<T> cur = getRight();
+		if (cur != null)
+			while (cur.getLeft() != null)
+				cur = cur.getLeft();
+		return cur;
+	}
+
+	void replaceInParent(BasicNode<T> replacement) {
+		final BasicNode<T> parent = getParent();
+		if (parent.getLeft() == this) {
+			parent.setLeft(replacement);
+		} else {
+			parent.setRight(replacement);
+		}
 	}
 }
