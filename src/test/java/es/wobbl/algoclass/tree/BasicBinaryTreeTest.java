@@ -3,6 +3,7 @@ package es.wobbl.algoclass.tree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -17,6 +18,8 @@ import com.google.common.collect.Sets;
 public class BasicBinaryTreeTest {
 
 	private BasicBinaryTree<Integer> tree;
+
+	private final Set<Integer> values = Sets.newHashSet();
 
 	static void eachValue(Consumer<Integer> c) {
 		c.accept(13);
@@ -41,6 +44,7 @@ public class BasicBinaryTreeTest {
 		tree = new BasicBinaryTree<>();
 		eachValue((i) -> {
 			tree.insert(i);
+			values.add(i);
 		});
 	}
 
@@ -50,6 +54,12 @@ public class BasicBinaryTreeTest {
 		assertEquals(8, root.getLeft().getValue().intValue());
 		assertEquals(20, root.getRight().getValue().intValue());
 		assertEquals(10, root.getLeft().getRight().getValue().intValue());
+	}
+
+	@Test
+	public void testStream() {
+		final Set<Object> actualValues = new HashSet<>(Arrays.asList(tree.stream().toArray()));
+		assertEquals(values, actualValues);
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package es.wobbl.algoclass.tree;
 
+import java.util.function.Consumer;
 
 class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 	BasicNode(T value, BasicNode<T> parent, BasicNode<T> a, BasicNode<T> b) {
@@ -80,5 +81,13 @@ class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 		} else {
 			parent.setRight(replacement);
 		}
+	}
+
+	public void each(Consumer<T> consumer) {
+		if (getLeft() != null)
+			getLeft().each(consumer);
+		if (getRight() != null)
+			getRight().each(consumer);
+		consumer.accept(getValue());
 	}
 }
