@@ -74,13 +74,6 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 		}
 	}
 
-	@Override
-	public void each(Consumer<T> consumer) {
-		if (root == null)
-			return;
-		root.each(consumer);
-	}
-
 	private enum Position {
 		LEFT, RIGHT, THIS;
 	}
