@@ -21,4 +21,14 @@ public class RBTreeTest {
 				Colour.BLACK), new RBNode<>(7, null, null), Colour.BLACK);
 		assertEquals(root.getLeft().getLeft().uncle(), root.getRight());
 	}
+
+	@Test
+	public void testInsert() throws Exception {
+		final RBNode<Integer> root = new RBNode<>(6, null, null);
+		root.insert(5);
+		root.insert(4);
+		root.insert(7);
+		assertEquals(root.getLeft().getLeft().uncle(), root.getRight());
+	}
+
 }
