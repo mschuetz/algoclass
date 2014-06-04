@@ -1,5 +1,7 @@
 package es.wobbl.algoclass.tree;
 
+import com.google.common.base.Preconditions;
+
 public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 
 	public enum Colour {
@@ -20,6 +22,10 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 	RBNode(T value, RBNode<T> parent, RBNode<T> a, RBNode<T> b, Colour c) {
 		super(value, parent, a, b);
 		this.setColour(c);
+	}
+
+	public boolean is(Colour c) {
+		return c == colour;
 	}
 
 	public Colour getColour() {
@@ -95,5 +101,16 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 		return lookup(value, (parent, current) -> {
 			return current;
 		});
+	}
+
+	public int validate() {
+		final int leftCount = getLeft() == null ? 0 : getLeft().validate();
+		final int rightCount = getRight() == null ? 0 : getRight().validate();
+		Preconditions
+				.checkState(leftCount == rightCount, "rule 5 violated. path length mismatch (%s!=%s)", leftCount, rightCount);
+		Preconditions.checkState(is(Colour.BLACK)
+				|| ((getLeft() == null || getLeft().is(Colour.BLACK)) && (getRight() == null || getRight().is(Colour.BLACK))),
+				"rule 4 violated. this node is red but has a red child");
+		return leftCount + (is(Colour.BLACK) ? 1 : 0);
 	}
 }

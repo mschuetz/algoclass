@@ -23,12 +23,21 @@ public class RBTreeTest {
 	}
 
 	@Test
-	public void testInsert() throws Exception {
+	public void testNodeInsert() throws Exception {
 		final RBNode<Integer> root = new RBNode<>(6, null, null);
 		root.insert(5);
 		root.insert(4);
 		root.insert(7);
 		assertEquals(root.getLeft().getLeft().uncle(), root.getRight());
+	}
+
+	@Test
+	public void testTreeInsert() throws Exception {
+		final RBTree<Integer> t = new RBTree<>();
+		t.insert(6);
+		t.insert(5);
+		t.insert(7);
+		t.validate();
 	}
 
 }
