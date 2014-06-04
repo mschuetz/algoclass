@@ -8,15 +8,11 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 
 	private Colour colour;
 
-	RBNode(T value, RBNode<T> parent, RBNode<T> a, RBNode<T> b) {
-		super(value, parent, a, b);
-	}
-
 	/*
 	 * construct a node with two black null leaves
 	 */
 	RBNode(T value, RBNode<T> parent, Colour c) {
-		super(value, parent, null, null);
+		this(value, parent, null, null, c);
 		// setLeft(new RBNode<>(null, this, null, null, Colour.BLACK));
 		// setRight(new RBNode<>(null, this, null, null, Colour.BLACK));
 	}
