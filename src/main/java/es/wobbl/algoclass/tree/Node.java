@@ -6,6 +6,7 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 	private N left, right, parent;
 	private T value;
 
+	@SuppressWarnings("unchecked")
 	public Node(T value, N parent, N left, N right) {
 		this.value = value;
 		if (parent != null) {
@@ -13,9 +14,11 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 		}
 		if (left != null) {
 			setLeft(left);
+			left.setParent((N) this);
 		}
 		if (right != null) {
 			setRight(right);
+			right.setParent((N) this);
 		}
 	}
 

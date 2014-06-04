@@ -1,6 +1,5 @@
 package es.wobbl.algoclass.tree;
 
-
 class BasicNode<T extends Comparable<T>> extends Node<BasicNode<T>, T> {
 	BasicNode(T value, BasicNode<T> parent, BasicNode<T> a, BasicNode<T> b) {
 		super(value, parent, a, b);
