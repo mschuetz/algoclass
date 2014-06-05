@@ -2,8 +2,6 @@ package es.wobbl.algoclass.tree;
 
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import com.google.common.base.Preconditions;
 
 import es.wobbl.algoclass.tree.RBNode.Colour;
@@ -17,6 +15,11 @@ public class RBTree<T extends Comparable<T>> implements BinaryTree<RBNode<T>, T>
 		return root;
 	}
 
+	void setRoot(RBNode<T> root) {
+		root.setParent(null);
+		this.root = root;
+	}
+
 	@Override
 	public RBNode<T> lookup(T value) {
 		if (root == null)
@@ -27,13 +30,11 @@ public class RBTree<T extends Comparable<T>> implements BinaryTree<RBNode<T>, T>
 	@Override
 	public RBNode<T> insert(T value) {
 		if (root == null)
-			return root = new RBNode<>(value, null, Colour.BLACK);
+			return root = new RBNode<>(value, this, null, Colour.BLACK);
 
 		final RBNode<T> n = root.insert(value);
-		if (n.getParent().is(Colour.BLACK))
-			return n;
-
-		throw new NotImplementedException("not all cases implemented yet");
+		n.rebalance();
+		return n;
 	}
 
 	/**

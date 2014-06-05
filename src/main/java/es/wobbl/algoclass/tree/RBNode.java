@@ -9,18 +9,20 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 	}
 
 	private Colour colour;
+	private final RBTree<T> tree;
 
 	/*
 	 * construct a node with two black null leaves
 	 */
-	RBNode(T value, RBNode<T> parent, Colour c) {
-		this(value, parent, null, null, c);
+	RBNode(T value, RBTree<T> tree, RBNode<T> parent, Colour c) {
+		this(value, tree, parent, null, null, c);
 		// setLeft(new RBNode<>(null, this, null, null, Colour.BLACK));
 		// setRight(new RBNode<>(null, this, null, null, Colour.BLACK));
 	}
 
-	RBNode(T value, RBNode<T> parent, RBNode<T> a, RBNode<T> b, Colour c) {
+	RBNode(T value, RBTree<T> tree, RBNode<T> parent, RBNode<T> a, RBNode<T> b, Colour c) {
 		super(value, parent, a, b);
+		this.tree = tree;
 		this.setColour(c);
 	}
 
@@ -58,7 +60,7 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 			return this;
 		} else if (rel < 0) {
 			if (getLeft() == null) {
-				final RBNode<T> newNode = new RBNode<>(value, this, null, null, Colour.RED);
+				final RBNode<T> newNode = new RBNode<>(value, tree, this, null, null, Colour.RED);
 				setLeft(newNode);
 				return newNode;
 			} else {
@@ -66,7 +68,7 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 			}
 		} else {
 			if (getRight() == null) {
-				final RBNode<T> newNode = new RBNode<>(value, this, null, null, Colour.RED);
+				final RBNode<T> newNode = new RBNode<>(value, tree, this, null, null, Colour.RED);
 				setRight(newNode);
 				return newNode;
 			} else {
@@ -113,4 +115,80 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 				"rule 4 violated. this node is red but has a red child");
 		return leftCount + (is(Colour.BLACK) ? 1 : 0);
 	}
+
+	void rebalance() {
+		if (getParent() == null || getParent().is(Colour.BLACK))
+			return;
+		// If both the parent P and the uncle U are red, then both of them can
+		// be repainted black and the grandparent G becomes red
+		if (uncle() != null && uncle().is(Colour.RED)) {
+			getParent().setColour(Colour.BLACK);
+			uncle().setColour(Colour.BLACK);
+			grandparent().setColour(Colour.RED);
+			grandparent().rebalance();
+		} else {
+			if (this == getParent().getRight() && grandparent().getLeft() == getParent()) {
+				getParent().rotateLeft();
+				getLeft().rebalanceCase5();
+				return;
+			} else if (this == getParent().getLeft() && grandparent().getRight() == getParent()) {
+				getParent().rotateRight();
+				getRight().rebalanceCase5();
+				return;
+			}
+			rebalanceCase5();
+		}
+		tree.getRoot().setColour(Colour.BLACK);
+	}
+
+	private void rebalanceCase5() {
+		/*
+		 * 
+		 * n->parent->color = BLACK; g->color = RED; if (n == n->parent->left)
+		 * rotate_right(g); else rotate_left(g);
+		 */
+
+		getParent().setColour(Colour.BLACK);
+		grandparent().setColour(Colour.RED);
+		if (getParent().getLeft() == this)
+			grandparent().rotateRight();
+		else
+			grandparent().rotateLeft();
+	}
+
+	private void rotateRight() {
+		final RBNode<T> g = getParent();
+		final RBNode<T> n = getLeft();
+		if (g != null)
+			g.setRight(n);
+		else
+			tree.setRoot(n);
+		final RBNode<T> oldRight = n.getRight();
+		n.setRight(this);
+		setLeft(oldRight);
+	}
+
+	private void rotateLeft() {
+		final RBNode<T> g = getParent();
+		final RBNode<T> n = getRight();
+		if (g != null)
+			g.setLeft(n);
+		else
+			tree.setRoot(n);
+		final RBNode<T> oldLeft = n.getLeft();
+		n.setLeft(this);
+		setRight(oldLeft);
+	}
+
+	@Override
+	public String toString() {
+		return "RBNode [colour=" + colour + ", value=" + getValue() + "]";
+	}
+
+	public String toStringRecursive() {
+		return "RBNode [colour=" + colour + ", value=" + getValue() + ", left="
+				+ (getLeft() == null ? null : getLeft().toStringRecursive()) + ", right="
+				+ (getRight() == null ? null : getRight().toStringRecursive()) + "]";
+	}
+
 }

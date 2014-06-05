@@ -6,7 +6,6 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 	private N left, right, parent;
 	private T value;
 
-	@SuppressWarnings("unchecked")
 	public Node(T value, N parent, N left, N right) {
 		this.value = value;
 		if (parent != null) {
@@ -14,11 +13,9 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 		}
 		if (left != null) {
 			setLeft(left);
-			left.setParent((N) this);
 		}
 		if (right != null) {
 			setRight(right);
-			right.setParent((N) this);
 		}
 	}
 
@@ -34,10 +31,13 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 		return left;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setLeft(N left) {
-		if (left != null)
+		if (left != null) {
 			Preconditions.checkArgument(left.getValue().compareTo(getValue()) < 0, "new left value %s must be less than %s",
 					left.getValue(), getValue());
+			left.setParent((N) this);
+		}
 		this.left = left;
 	}
 
@@ -45,10 +45,13 @@ public class Node<N extends Node<N, T>, T extends Comparable<T>> {
 		return right;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setRight(N right) {
-		if (right != null)
+		if (right != null) {
 			Preconditions.checkArgument(right.getValue().compareTo(getValue()) > 0, "new right value %s must be greater than %s",
 					right.getValue(), getValue());
+			right.setParent((N) this);
+		}
 		this.right = right;
 	}
 
