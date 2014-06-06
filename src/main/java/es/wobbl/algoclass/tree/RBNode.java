@@ -159,10 +159,14 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 	private void rotateRight() {
 		final RBNode<T> g = getParent();
 		final RBNode<T> n = getLeft();
-		if (g != null)
-			g.setRight(n);
-		else
+		if (g != null) {
+			if (g.getLeft() == this)
+				g.setLeft(n);
+			else
+				g.setRight(n);
+		} else {
 			tree.setRoot(n);
+		}
 		final RBNode<T> oldRight = n.getRight();
 		n.setRight(this);
 		setLeft(oldRight);
@@ -171,10 +175,14 @@ public class RBNode<T extends Comparable<T>> extends Node<RBNode<T>, T> {
 	private void rotateLeft() {
 		final RBNode<T> g = getParent();
 		final RBNode<T> n = getRight();
-		if (g != null)
-			g.setLeft(n);
-		else
+		if (g != null) {
+			if (g.getLeft() == this)
+				g.setLeft(n);
+			else
+				g.setRight(n);
+		} else {
 			tree.setRoot(n);
+		}
 		final RBNode<T> oldLeft = n.getLeft();
 		n.setLeft(this);
 		setRight(oldLeft);
