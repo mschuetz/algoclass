@@ -1,7 +1,5 @@
 package es.wobbl.algoclass.tree;
 
-import java.awt.Color;
-
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -22,6 +20,7 @@ public class TreeUi<N extends Node<N, T>, T extends Comparable<T>> {
 
 	public TreeUi(Node<N, T> n) {
 		g = new SingleGraph("tree starting at " + n.getValue());
+		g.setAttribute("stylesheet", "node.black{fill-mode:plain;fill-color:#000;} node.red{fill-mode:plain;fill-color:#e00;}");
 		addNode(null, n, null);
 	}
 
@@ -63,7 +62,7 @@ public class TreeUi<N extends Node<N, T>, T extends Comparable<T>> {
 	private void setColor(org.graphstream.graph.Node gn, Node<N, T> n) {
 		if (n instanceof RBNode<?>) {
 			final RBNode<?> rbnode = (RBNode<?>) n;
-			gn.setAttribute("ui.color", rbnode == null || rbnode.is(Colour.BLACK) ? Color.BLACK : Color.RED);
+			gn.setAttribute("ui.class", rbnode == null || rbnode.is(Colour.BLACK) ? "black" : "red");
 		}
 	}
 
