@@ -2,6 +2,7 @@ package es.wobbl.algoclass.tree;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import es.wobbl.algoclass.tree.RBNode.Colour;
@@ -23,15 +24,6 @@ public class RBTreeTest {
 	}
 
 	@Test
-	public void testNodeInsert() throws Exception {
-		final RBNode<Integer> root = new RBNode<>(6, null, null, null);
-		root.insert(5);
-		root.insert(4);
-		root.insert(7);
-		assertEquals(root.getLeft().getLeft().uncle(), root.getRight());
-	}
-
-	@Test
 	public void testTreeInsert() throws Exception {
 		final RBTree<Integer> t = new RBTree<>();
 		t.insert(6);
@@ -39,6 +31,18 @@ public class RBTreeTest {
 		t.insert(4);
 		t.insert(7);
 		t.insert(9);
+		t.insert(1);
+		t.insert(10);
 		t.validate();
+	}
+
+	@Test
+	public void testTreeInsertRandomNodesLong() throws Exception {
+		final RBTree<Integer> t = new RBTree<>();
+		for (int i = 0; i < 1024; i++) {
+			final int v = RandomUtils.nextInt(0, 1024);
+			t.insert(v);
+			t.validate();
+		}
 	}
 }
