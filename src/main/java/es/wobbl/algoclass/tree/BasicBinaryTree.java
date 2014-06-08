@@ -1,6 +1,7 @@
 package es.wobbl.algoclass.tree;
 
 import java.util.ArrayDeque;
+import java.util.Comparator;
 import java.util.Spliterator;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
@@ -161,7 +162,7 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 		}
 
 		protected InOrderSpliterator() {
-			super(Long.MAX_VALUE, Spliterator.DISTINCT);
+			super(Long.MAX_VALUE, Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED);
 		}
 
 		final ArrayDeque<State> stack = new ArrayDeque<>();
@@ -206,6 +207,13 @@ public class BasicBinaryTree<T extends Comparable<T>> implements BinaryTree<Basi
 					}
 				}
 			}
+		}
+
+		@Override
+		public Comparator<? super T> getComparator() {
+			return (o1, o2) -> {
+				return o1.compareTo(o2);
+			};
 		}
 	}
 
