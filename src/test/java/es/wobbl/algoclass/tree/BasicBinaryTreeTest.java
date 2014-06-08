@@ -1,9 +1,9 @@
 package es.wobbl.algoclass.tree;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -58,8 +58,18 @@ public class BasicBinaryTreeTest {
 
 	@Test
 	public void testStream() {
-		final Set<Object> actualValues = new HashSet<>(Arrays.asList(tree.stream().toArray()));
-		assertEquals(values, actualValues);
+		tree = new BasicBinaryTree<>();
+		tree.insert(5);
+		tree.insert(2);
+		tree.insert(1);
+		tree.insert(4);
+		tree.insert(3);
+		tree.insert(9);
+		tree.insert(10);
+		tree.insert(6);
+		tree.insert(7);
+		tree.insert(8);
+		assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, tree.stream().toArray());
 	}
 
 	@Test
