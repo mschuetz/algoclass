@@ -1,7 +1,5 @@
 package es.wobbl.algoclass.tree;
 
-import java.util.stream.Stream;
-
 import com.google.common.base.Preconditions;
 
 import es.wobbl.algoclass.tree.RBNode.Colour;
@@ -54,11 +52,4 @@ public class RBTree<T extends Comparable<T>> implements BinaryTree<RBNode<T>, T>
 		// TODO Auto-generated method stub
 
 	}
-
-	@Override
-	public Stream<T> stream() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

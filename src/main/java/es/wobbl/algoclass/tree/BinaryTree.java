@@ -1,6 +1,7 @@
 package es.wobbl.algoclass.tree;
 
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.sun.istack.internal.Nullable;
 
@@ -15,5 +16,7 @@ public interface BinaryTree<N extends Node<N, T>, T extends Comparable<T>> {
 
 	public void delete(T value);
 
-	Stream<T> stream();
+	public default Stream<T> stream() {
+		return StreamSupport.stream(TreeSpliterators.inOrder(getRoot()), false);
+	}
 }

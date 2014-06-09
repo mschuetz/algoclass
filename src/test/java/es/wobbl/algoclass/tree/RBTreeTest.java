@@ -1,5 +1,6 @@
 package es.wobbl.algoclass.tree;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.lang3.RandomUtils;
@@ -44,5 +45,21 @@ public class RBTreeTest {
 			t.insert(v);
 			t.validate();
 		}
+	}
+
+	@Test
+	public void testStream() {
+		final RBTree<Integer> tree = new RBTree<>();
+		tree.insert(5);
+		tree.insert(2);
+		tree.insert(1);
+		tree.insert(4);
+		tree.insert(3);
+		tree.insert(9);
+		tree.insert(10);
+		tree.insert(6);
+		tree.insert(7);
+		tree.insert(8);
+		assertArrayEquals(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, tree.stream().toArray());
 	}
 }
