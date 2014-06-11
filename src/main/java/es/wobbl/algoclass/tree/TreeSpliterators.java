@@ -7,6 +7,8 @@ import java.util.Spliterators;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 
+import com.google.common.base.Preconditions;
+
 public class TreeSpliterators {
 
 	public static <N extends Node<N, T>, T extends Comparable<T>> Spliterator<T> inOrder(N root) {
@@ -43,17 +45,21 @@ public class TreeSpliterators {
 
 	static class DepthFirstSpliterator<N extends Node<N, T>, T extends Comparable<T>> extends AbstractSpliterator<T> {
 
-		private final N root;
+		private N root;
+		private final ArrayDeque<State<N, T>> stack = new ArrayDeque<>();
+		private final ArrayDeque<T> skippedRoots = new ArrayDeque<>();
 
 		protected DepthFirstSpliterator(N root) {
 			super(Long.MAX_VALUE, Spliterator.DISTINCT);
 			this.root = root;
 		}
 
-		final ArrayDeque<State<N, T>> stack = new ArrayDeque<>();
-
 		@Override
 		public boolean tryAdvance(Consumer<? super T> action) {
+			if (!skippedRoots.isEmpty()) {
+				action.accept(skippedRoots.pop());
+				return true;
+			}
 			State<N, T> state;
 			if (stack.isEmpty()) {
 				if (root == null)
@@ -89,6 +95,22 @@ public class TreeSpliterators {
 				}
 			}
 		}
+
+		/**
+		 * TODO should it account for being called after iteration has started?
+		 */
+		@Override
+		public Spliterator<T> trySplit() {
+			Preconditions.checkState(stack.isEmpty(), "stack not empty, iteration already running");
+			if (root == null || root.childCount() < 2) {
+				return null;
+			}
+			final N oldRoot = root;
+			root = oldRoot.getLeft();
+			skippedRoots.push(oldRoot.getValue());
+			return depthFirst(oldRoot.getRight());
+		}
+
 	}
 
 	static class InOrderSpliterator<N extends Node<N, T>, T extends Comparable<T>> extends AbstractSpliterator<T> {
