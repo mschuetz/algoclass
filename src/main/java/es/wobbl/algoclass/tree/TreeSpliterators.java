@@ -7,8 +7,6 @@ import java.util.Spliterators;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 
-import com.google.common.base.Preconditions;
-
 public class TreeSpliterators {
 
 	public static <N extends Node<N, T>, T extends Comparable<T>> Spliterator<T> inOrder(N root) {
@@ -96,12 +94,11 @@ public class TreeSpliterators {
 			}
 		}
 
-		/**
-		 * TODO should it account for being called after iteration has started?
-		 */
 		@Override
 		public Spliterator<T> trySplit() {
-			Preconditions.checkState(stack.isEmpty(), "stack not empty, iteration already running");
+			if (!stack.isEmpty()) {
+				return null;
+			}
 			if (root == null || root.childCount() < 2) {
 				return null;
 			}
