@@ -44,12 +44,19 @@ public class TreeSpliterators {
 	static class DepthFirstSpliterator<N extends Node<N, T>, T extends Comparable<T>> extends AbstractSpliterator<T> {
 
 		private N root;
-		private final ArrayDeque<State<N, T>> stack = new ArrayDeque<>();
+		private final ArrayDeque<N> stack = new ArrayDeque<>();
 		private final ArrayDeque<T> skippedRoots = new ArrayDeque<>();
 
 		protected DepthFirstSpliterator(N root) {
 			super(Long.MAX_VALUE, Spliterator.DISTINCT);
+			initialize(root);
+		}
+
+		private void initialize(N root) {
 			this.root = root;
+			stack.clear();
+			if (root != null)
+				stack.push(root);
 		}
 
 		@Override
@@ -58,56 +65,31 @@ public class TreeSpliterators {
 				action.accept(skippedRoots.pop());
 				return true;
 			}
-			State<N, T> state;
 			if (stack.isEmpty()) {
-				if (root == null)
-					return false;
-				state = new State<>(root);
-				stack.push(state);
-			} else {
-				state = stack.getFirst();
+				return false;
 			}
-			while (true) {
-				switch (state.pos) {
-				case LEFT:
-					state.pos = Position.RIGHT;
-					if (state.node.getLeft() != null) {
-						stack.push(new State<N, T>(state.node.getLeft()));
-						state = stack.getFirst();
-					}
-					break;
-				case RIGHT:
-					state.pos = Position.THIS;
-					if (state.node.getRight() != null) {
-						stack.push(new State<N, T>(state.node.getRight()));
-						state = stack.getFirst();
-					}
-					break;
-				case THIS:
-					action.accept(state.node.getValue());
-					stack.pop();
-					return !stack.isEmpty();
-				default:
-					throw new IllegalStateException(
-							"past_right or anything else must not occur within the depth first spliterator");
-				}
+			final N node = stack.pop();
+			if (node.getLeft() != null) {
+				stack.push(node.getLeft());
 			}
+			if (node.getRight() != null) {
+				stack.push(node.getRight());
+			}
+			action.accept(node.getValue());
+			return !stack.isEmpty();
 		}
 
 		@Override
 		public Spliterator<T> trySplit() {
-			if (!stack.isEmpty()) {
-				return null;
+			// if initial state and splittable
+			if (stack.size() == 1 && stack.getFirst() == root && root.childCount() == 2) {
+				final N oldRoot = root;
+				initialize(oldRoot.getLeft());
+				skippedRoots.push(oldRoot.getValue());
+				return depthFirst(oldRoot.getRight());
 			}
-			if (root == null || root.childCount() < 2) {
-				return null;
-			}
-			final N oldRoot = root;
-			root = oldRoot.getLeft();
-			skippedRoots.push(oldRoot.getValue());
-			return depthFirst(oldRoot.getRight());
+			return null;
 		}
-
 	}
 
 	static class InOrderSpliterator<N extends Node<N, T>, T extends Comparable<T>> extends AbstractSpliterator<T> {

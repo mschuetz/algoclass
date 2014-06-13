@@ -27,7 +27,14 @@ public class TreeSpliteratorsTest {
 	public void createTree() {
 		tree = new BasicBinaryTree<>();
 		expected = new HashSet<>();
-		IntStream.range(0, 16).forEach((i) -> {
+		// ensure the spliterator can be split at least once
+		tree.insert(32768);
+		expected.add(32768);
+		tree.insert(16384);
+		expected.add(16384);
+		tree.insert(49152);
+		expected.add(49152);
+		IntStream.range(0, 1024 - 3).forEach((i) -> {
 			final int val = RandomUtils.nextInt(0, 65536);
 			tree.insert(val);
 			expected.add(val);
@@ -37,6 +44,19 @@ public class TreeSpliteratorsTest {
 
 	static <T> Set<T> toSet(BasicBinaryTree<? extends T> tree) {
 		return Sets.newHashSet(tree);
+	}
+
+	@Test
+	public void testDepthFirst() throws Exception {
+		final Spliterator<Integer> s1 = TreeSpliterators.depthFirst(tree.getRoot());
+
+		final Set<Integer> actual = Sets.newHashSet();
+
+		s1.forEachRemaining((i) -> {
+			assertFalse("must not yet contain " + i, actual.contains(i));
+			actual.add(i);
+		});
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -55,7 +75,7 @@ public class TreeSpliteratorsTest {
 			assertFalse("must not yet contain " + i, actual.contains(i));
 			actual.add(i);
 		});
-		System.err.println(actual.size());
+		assertEquals(expected, actual);
 	}
 
 	@Test
