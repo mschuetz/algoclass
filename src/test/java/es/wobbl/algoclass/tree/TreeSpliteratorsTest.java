@@ -81,10 +81,13 @@ public class TreeSpliteratorsTest {
 	@Test
 	public void testParallelDepthFirst() throws Exception {
 		final Spliterator<Integer> s1 = TreeSpliterators.depthFirst(tree.getRoot());
-		final ConcurrentMap<Integer, String> actual = new ConcurrentHashMap<>(1204);
+		// use a map instead of e.g. ConcurrentSkipListSet because the latter
+		// doesn't have an atomic operation equivalent to ConcurrentHashMap's
+		// putIfAbsent
+		final ConcurrentMap<Integer, Boolean> actual = new ConcurrentHashMap<>(1024);
 
 		StreamSupport.stream(s1, true).forEach((i) -> {
-			final String prev = actual.putIfAbsent(i, "present");
+			final Boolean prev = actual.putIfAbsent(i, true);
 			assertNull(i + " was already present", prev);
 		});
 
