@@ -28,22 +28,19 @@ public class TreeSpliteratorsTest {
 		tree = new BasicBinaryTree<>();
 		expected = new HashSet<>();
 		// ensure the spliterator can be split at least once
-		tree.insert(32768);
-		expected.add(32768);
-		tree.insert(16384);
-		expected.add(16384);
-		tree.insert(49152);
-		expected.add(49152);
+		insert(32768);
+		insert(16384);
+		insert(49152);
 		IntStream.range(0, 1024 - 3).forEach((i) -> {
 			final int val = RandomUtils.nextInt(0, 65536);
-			tree.insert(val);
-			expected.add(val);
+			insert(val);
 		});
-		assertEquals(expected, toSet(tree));
+		assertEquals(expected, Sets.newHashSet(tree));
 	}
 
-	static <T> Set<T> toSet(BasicBinaryTree<? extends T> tree) {
-		return Sets.newHashSet(tree);
+	private void insert(final int val) {
+		tree.insert(val);
+		expected.add(val);
 	}
 
 	@Test
@@ -86,7 +83,7 @@ public class TreeSpliteratorsTest {
 		// putIfAbsent
 		final ConcurrentMap<Integer, Boolean> actual = new ConcurrentHashMap<>(1024);
 
-		StreamSupport.stream(s1, true).forEach((i) -> {
+		StreamSupport.stream(s1, true).parallel().forEach((i) -> {
 			final Boolean prev = actual.putIfAbsent(i, true);
 			assertNull(i + " was already present", prev);
 		});
