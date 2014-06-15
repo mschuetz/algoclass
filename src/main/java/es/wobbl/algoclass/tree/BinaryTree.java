@@ -6,7 +6,7 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import com.sun.istack.internal.Nullable;
+import javax.annotation.Nullable;
 
 public interface BinaryTree<N extends Node<N, T>, T extends Comparable<T>> extends Iterable<T> {
 

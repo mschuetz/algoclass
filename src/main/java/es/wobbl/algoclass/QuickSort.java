@@ -1,7 +1,5 @@
 package es.wobbl.algoclass;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.AbstractList;
@@ -176,7 +174,8 @@ public class QuickSort {
 
 	static <T extends Comparable<T>> void assertSorted(List<T> arr) {
 		for (int i = 0; i < arr.size() - 1; i++) {
-			assertTrue(arr.get(i).compareTo(arr.get(i + 1)) < 1);
+			if (!(arr.get(i).compareTo(arr.get(i + 1)) < 1))
+				throw new AssertionError("not sorted");
 		}
 	}
 
