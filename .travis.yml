@@ -1,5 +1,9 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 script:
-  - mvn site
+- mvn site
+- curl -s 'https://raw.githubusercontent.com/mschuetz/travis-utils/master/push_gh_pages.sh' | bash -eu
+env:
+  global:
+    secure: O00LvExAf9/PpdTPOOzx7W6Mr72reDO+dmbhazXUDQVUNcSK2+td/jyx36zrRqdwP8pfQqYyhJ5J8a1DjJCA0S495rJMWOcbYl0wD5zPna1+ctgZfXZtSUvvrBmR5F1J0GeFmz9hji/59UCNQJ2veWuDHqYT0nJZJe9xXlVij8E=
