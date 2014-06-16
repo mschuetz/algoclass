@@ -7,4 +7,4 @@ script:
   | bash -eu
 env:
   global:
-  - secure: g5OZ8CpFImqfJxWdiHviXi4h8pcFS9n/y1h9YlFJBysDRHN300HtZKmmE3BabLXIO87mUKAUdi+rtUMtkGrzensjbUwoX0GgBwa4BTdAUfmdCazhpp/z4QMqwZHlRqx+aLSIsfjoMbQjjkAo4Mi2COEYvOgXy9ohuiCkX4PtVSI=
+  - secure: emnxD4cqd7eiJWVZmu/vEts0Wbq3lVlOD5e7HGgspsGntmes2k8CWMcrVbOYl/hcmqLIovrgul3KAK9hqBgE2Dp6shZMKQ1TQaZeqTqyMh0WCENrloDd+4cdC0ZBZ9Pvvx0NtElnWa5PLxPNsG+e8CijZvqFKH8y9MYJjMxust0=
