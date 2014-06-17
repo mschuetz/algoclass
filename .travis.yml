@@ -3,8 +3,8 @@ jdk:
 - oraclejdk8
 script:
 - mvn site
-- curl -s 'https://raw.githubusercontent.com/mschuetz/travis-utils/master/push_gh_pages.sh'
-  | bash -eu
+- curl -s 'https://raw.githubusercontent.com/mschuetz/travis-utils/master/push_gh_pages.sh' | bash -eu
 env:
   global:
+  - REPORT_DIR=target/site
   - secure: emnxD4cqd7eiJWVZmu/vEts0Wbq3lVlOD5e7HGgspsGntmes2k8CWMcrVbOYl/hcmqLIovrgul3KAK9hqBgE2Dp6shZMKQ1TQaZeqTqyMh0WCENrloDd+4cdC0ZBZ9Pvvx0NtElnWa5PLxPNsG+e8CijZvqFKH8y9MYJjMxust0=
